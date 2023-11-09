@@ -56,8 +56,7 @@
 <th:block layout:fragment="css">
     <style>
         .content-mg{
-            margin-left:30%;
-            margin-right:30%;
+
             margin-top:2%;
             margin-bottom:100px;
         }
@@ -71,7 +70,8 @@
             width:100px;
         }
         .card{
-            width:750px;
+            max-width:750px;
+            min-width: auto;
             height:100%;
             padding:30px;
             margin-bottom:20px;
@@ -85,13 +85,13 @@
     </style>
 </th:block>
 
-<div layout:fragment="content" class="content-mg">
+<div layout:fragment="content" class="content-mg" style="padding: 7%;">
 
     <h2 class="mb-4">
         구매 이력
     </h2>
 
-    <div th:each="order : ${orders.getContent()}">
+    <div th:each="order : ${orders.getContent()}" >
 
         <div class="d-flex mb-3 align-self-center">
             <h4 th:text="${order.orderDate } + ' 주문'"></h4>

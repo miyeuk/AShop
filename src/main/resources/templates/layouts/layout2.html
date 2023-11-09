@@ -14,19 +14,16 @@
     <th:block layout:fragment="script"></th:block>
     <th:block layout:fragment="css"></th:block>
 </head>
-<body >
-<header class="masthead" th:style="'background-image: url(' + @{/img/bgImg.png} +');'">
-<div class="container" style=" background-color: white">
+<body>
+<div class="container">
 <div th:replace="fragments/header::header"></div>
-
-
-
+</div>
 <div layout:fragment="content" class="content">
 
 </div>
 
-
+<div class="container">
+<div th:replace="fragments/footter::footer"></div>
 </div>
-    <div th:replace="fragments/footter::footer"></div>
 </body>
 </html>

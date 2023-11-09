@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout1}">
+
+
+
+<div layout:fragment="content" >
+    <style>
+
+        li{ list-style: none;}
+
+        /* Form input, button, and submit button styles */
+        .max-container select[name="searchOption"],
+        input[type="text"],
+        button,
+        submit {
+            padding: 0.3em;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #e0b997;
+            color: white;
+            border: none;
+            cursor: pointer;
+
+        }
+
+        button:hover {
+            background-color:#e0b997;
+            border-style: none;
+        }
+        button:focus {
+            background-color:#e0b997;
+            outline: none;
+        }
+        button:active{
+            border: none;
+            outline: none;
+        }
+        a {
+            text-decoration: none;
+        }
+        .accordion-item {
+            max-height: 1000px; /* 원하는 최대 높이 값으로 변경하세요. */
+        }
+
+        /* 아코디언이 열렸을 때, 내용을 숨깁니다. */
+        .accordion-collapse {
+            overflow: hidden;
+            transition: max-height 0.3s ease; /* 부드러운 펼침 애니메이션을 위해 추가합니다. */
+        }
+
+        /* 아코디언이 열린 상태에 대한 스타일을 설정합니다. */
+        .accordion-item.show .accordion-collapse {
+            max-height:none; /* 아코디언이 열렸을 때 최대 높이를 제거합니다. */
+        }
+    </style>
+
+    <div class="py-5 text-center">
+        <h2>
+            <strong>공지사항</strong>
+        </h2>
+    </div>
+    <hr class="my-4">
+
+    <div class="accordion accordion-flush" id="accordionExample" th:each="notice, iterStat : ${noticeList}">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button rounded-1 bg-body-secondary text-emphasis-light " type="button"
+                        data-bs-toggle="collapse" th:data-bs-target="'#flush-collapse-' + ${iterStat.index}"
+                        aria-expanded="false" aria-controls="'flush-collapse-' + ${iterStat.index}" style="width: 100%; border: none; opacity: 60%;">
+                    <ul class="list-inline py-1 mg-1" >
+
+                        <li class="list-inline-item text-end" th:text="${notice.nTitle}" style="font-size: 1.2em; font-weight: bold; color: #2c190b;" />
+                    </ul>
+                </button>
+            </h2>
+            <div th:id="'flush-collapse-' + ${iterStat.index}" class="accordion-collapse collapse "
+                 th:classappend="${iterStat.index == 0} ? 'show' : ''"
+                 data-bs-parent="#accordionExample" style="border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1%"  >
+                <div class="accordion-body " style="padding: 1rem; ">
+                    <p th:text="${notice.content}" />
+                    <a class="btn btn-primary" th:href="@{'/delete/' + ${notice.idx}}" role="button"  th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}"
+                       style="background-color: #e0b997; border-style: none;">공지 삭제</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+    <div class="col " >
+        <a class="btn btn-primary" href="/noticeWrite" role="button" th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">공지 등록</a>
+
+
+    </div>
+
+
+
+
+    <nav aria-label="Page navigation" >
+        <ul class="pagination justify-content-center">
+            <!-- 페이징을 위한 이전 페이지로 이동 링크 -->
+            <li class="page-item" th:if="${ currentPage > 0}">
+                <a class="page-link" th:href="@{'/noticeList?page=' + ${ currentPage - 1 } }">Previous</a>
+            </li>
+            <!-- Page numbers -->
+            <div th:each="pageNumber : ${#numbers.sequence(0, pageNumbers.size() - 1)}">
+                <li class="page-item" th:class="${pageNumber} == ${currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{'/noticeList?page=' + ${pageNumber}}" th:text="${pageNumber + 1}"></a>
+                </li>
+            </div>
+            <!-- 페이징을 위한 다음 페이지로 이동 링크 -->
+            <li class="page-item" th:if="${ currentPage + 1 < totalPages }">
+                <a class="page-link" th:href="@{'/noticeList?page=' + ${currentPage + 1 }}">Next</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+</div>
+
+
+
+<!-- Core theme JS-->
+
+<script>
+    var message = "[[${message}]]";
+    if (message && message.trim() !== "") {
+        alert(message);
+    }
+
+
+    document.getElementById('deleteButton').addEventListener('click', function() {
+        var noticeId = 1; // 삭제할 공지사항의 ID를 설정 (원하는 ID로 변경)
+
+        fetch('/delete/' + noticeId, {
+            method: 'DELETE'
+        })
+            .then(function(response) {
+                if (response.status === 200) {
+                    document.getElementById('result').innerHTML = '공지사항이 삭제되었습니다.';
+                } else {
+                    document.getElementById('result').innerHTML = '공지사항 삭제에 실패했습니다.';
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+            });
+    });
+
+
+
+
+</script>
+</html>

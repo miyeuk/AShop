@@ -9,7 +9,6 @@ import lombok.Setter;
 public class MainItemDto {
 
     private Long id;
-
     private String itemNm;
     private String itemDetail;
     private String imgUrl;

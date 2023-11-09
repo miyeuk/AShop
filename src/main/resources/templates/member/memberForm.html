@@ -6,10 +6,197 @@
 <!--사용자 CSS 추가-->
 <th:block layout:fragment="css">
     <style>
+        *{
+            box-sizing: border-box;
+        }
+
+        .background{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+
+
+        }
+
+
+
         .fieldError{
             color: #bd2130;
         }
+        .outer__box{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 670px;
+            height: 960px;
+            border: 1px solid #AACDFF;
+            box-shadow: 7px 7px 39px 0px #0068FF40;
+            border-radius: 20px;
+            border: 1px;
+        }
+
+        .wrapper{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 470px;
+            height: 818px;
+        }
+
+        .wrapper__head{
+            width: 466px;
+            height: 94px;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 47.36px;
+            color: #0068ff;
+        }
+
+        .wrapper__email{
+            display: flex;
+            flex-direction: column;
+            width : 466px;
+            height: 80px;
+        }
+
+        .wrapper__name{
+            display: flex;
+            flex-direction: column;
+            width : 466px;
+            height: 80px;
+        }
+
+        .wrapper__password{
+            display: flex;
+            flex-direction: column;
+            width : 466px;
+            height: 80px;
+        }
+
+        .wrapper__password__check{
+            display: flex;
+            flex-direction: column;
+            width : 466px;
+            height: 80px;
+        }
+
+        .email__input{
+            width: 466px;
+            height: 56px;
+            border-width: 0px;
+            border-bottom: 1px solid gray;
+        }
+
+        .email__input:focus{
+            outline: none;
+            border-bottom: 1px solid #0068FF;
+        }
+
+        .wrapper__gender{
+            display: flex;
+            flex-direction: row;
+            width: 140px;
+            height: 24px;
+            justify-content: space-between;
+        }
+
+        .gender__radio{
+            display: flex;
+            flex-direction: row;
+            width: 55px;
+            height: 24px;
+            font-size: 16px;
+            font-weight: 400;
+            justify-content: center;
+        }
+
+        [type="radio"]{
+            appearance: none;
+            border: 1px solid red;
+            border-radius: 50%;
+            width: 1.25em;
+            height: 1.25em;
+            margin:0 0 2px;
+            padding:0;
+            vertical-align:middle;
+        }
+
+        [type="radio"]:not :checked{
+            border-color: gray;
+        }
+
+        [type="radio"]:checked {
+            border: 0.4em solid tomato;
+        }
+
+        .wrapper__agree{
+            display: flex;
+            flex-direction: row;
+            width: 454px;
+            height: 21px;
+            font-size: 13.5px;
+            font-weight: 700;
+            line-height: 20.7px;
+            justify-content: space-between;
+        }
+
+        [type="checkbox"]{
+            appearance: none;
+            border: 1px solid red;
+            width: 1.25em;
+            height: 1.25em;
+            margin:0 0 2px;
+            padding:0;
+            vertical-align:middle;
+        }
+
+        [type="checkbox"]:not :checked{
+            border-color: red;
+        }
+
+        [type="checkbox"]:checked {
+            border: 0.4em solid tomato;
+        }
+
+        .wrapper__join{
+
+        }
+
+        .join__button{
+            width: 200px;
+            height: 50px;
+            border: 1px solid blue;
+            background-color: #ffffff;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            color: blue;
+        }
+
+        .join__button:hover{
+
+            border: 1px solid #ffffff;
+            background-color: #AACDFF;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .join__button:focus{
+
+
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+
     </style>
+
 </th:block>
 
 
@@ -23,52 +210,95 @@
                 alert(errorMessage);
             }
         });
+
+    </script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:inline="javascript">
+    function kakaopost() {
+    new daum.Postcode({
+    oncomplete: function(data) {
+    document.querySelector("#LOGIN_POST").value = data.zonecode;
+    document.querySelector("#LOGIN_ADDR").value =  data.address
+    document.querySelector("input[name=detailAddr]").focus(); //상세입력 포커싱
+    }
+    }).open();
+    }
+
     </script>
 </th:block>
 
 <div layout:fragment="content">
+    <div class="background container">
+        <div class="outer__box">
+            <div class="wrapper">
+                <div class="wrapper__head">회원 가입을 위해<br> 정보를 입력해주세요.</div>
 
-    <form action="/members/new" role="form" method="post"
-            th:object="${memberFormDto}">
-        <div class="form-group">
-            <label th:for="name">이름</label>
-            <input type="text" th:field="*{name}" class="form-control"
-            placeholder="이름을 입력해주세요">
-            <p th:if="${#fields.hasErrors('name')}"
-                th:errors="*{name}" class="fieldError">Incorrect data</p>
-        </div>
-        <div class="form-group">
-            <label th:for="email">이메일 주소</label>
-            <input type="email" th:field="*{email}" class="form-control"
-                    placeholder="이메일을 입력해주세요">
-            <p th:if="${#fields.hasErrors('email')}"
-                th:errors="*{email}" class="fieldError">Incorrect data</p>
-        </div>
-        <div class="form-group">
-            <label th:for="password">비밀 번호</label>
-            <input type="password" th:field="*{password}" class="form-control"
-                    placeholder="비밀번호 입력">
-            <p th:if="${#fields.hasErrors('password')}"
-                th:errors="*{password}" class="fieldError">Incorrect data</p>
-        </div>
+                    <form action="/members/new" role="form" method="post"
+                            th:object="${memberFormDto}">
+                        <div class="form-group wrapper__name">
+                            <label th:for="name">이름</label>
+                            <input type="text" th:field="*{name}" class="form-control email__input"
+                            placeholder="이름을 입력해주세요">
+                            <p th:if="${#fields.hasErrors('name')}"
+                                th:errors="*{name}" class="fieldError">Incorrect data</p>
+                        </div>
+                        <div class="form-group wrapper__email">
+                            <label th:for="email" >이메일 주소</label>
+                            <input type="email"  th:field="*{email}" class="form-control email__input"
+                                    placeholder="이메일을 입력해주세요">
+                            <p th:if="${#fields.hasErrors('email')}"
+                                th:errors="*{email}" class="fieldError">Incorrect data</p>
+                        </div>
+                        <div class="form-group wrapper__password">
+                            <label th:for="password">비밀 번호</label>
+                            <input type="password" th:field="*{password}" class="form-control email__input"
+                                    placeholder="비밀번호 입력">
+                            <p th:if="${#fields.hasErrors('password')}"
+                                th:errors="*{password}" class="fieldError">Incorrect data</p>
+                        </div>
 
-        <div class="form-group">
-        <label th:for="address">주소</label>
-        <input type="text" th:field="*{address}" class="form-control"
-                placeholder="주소를 입력하세요">
-        <p th:if="${#fields.hasErrors('address')}"
-            th:errors="*{address}" class="fieldError">Incorrect data</p>
+
+
+
+
+                            <input class="postBut" type="button" value="우편번호찾기" onclick="kakaopost()" style="float:right; border: none; border-radius: 5px; background-color: #cccccc;" >
+
+                            <div th:class="form-group">
+                                <label>주소</label>
+                                <input id="LOGIN_ADDR" type="text" name="addr" size="20" placeholder="주소" th:field="*{address}"  class="form-control email__input">
+                                <p th:if="${#fields.hasErrors('address')}"
+                                    th:errors="*{address}" class="fieldError">Incorrect data</p>
+                            </div>
+                            <div th:class="form-group">
+                                <label>상세주소</label>
+                                <input id="ADDR_DETAIL" type="text" name="detailAddr" th:field="*{detailAddr}"  placeholder="상세주소" class="form-control email__input">
+                            </div>
+                            <div th:class="form-group">
+                                <label>우편번호</label>
+                                <input id="LOGIN_POST" type="text"  name="zipcode" placeholder="우편번호" th:field="*{zipcode}"  class="form-control email__input">
+                            </div>
+
+
+                        <div class="wrapper__agree">
+                            <input type="checkbox">이용약관 개인정보 수집 및 이용, 마케팅 활용 선택에 모두 동의합니다.
+                        </div>
+                        <div  class="wrapper__join" style=" text-align: center ">
+                            <button type="submit" class=" join__button" style="margin-top: 3%">회원가입</button>
+                        </div>
+
+
+
+                        <input type="hidden" th:name="${_csrf.parameterName}"
+                                                        th:value="${_csrf.token}">
+                        <!--스프링 시큐리티를 사용할 경우 기본적으로 CSRF(cross Site Request Forgery)를 방어하기 위해 모든 Post
+                        방식의 데이터 전송에는 CSRF 토큰 값이 있어야 한다. CSRF 토큰은 실제 서버에서 허용한 요청이 맞는지 확인하기 위한 토큰이다.
+                        사용자의 세션에 임의의 값을 저장하여 요청마다 그 값을 포함하여 전송하면 서버에서 세션에 저장된 값과 요청이 온 값이 일치하는지
+                        확인하여 CSRF를 방어-->
+                    </form>
+
+            </div>
+        </div>
     </div>
-        <div style="text-align: center">
-            <button type="submit" class="btn btn-primary" style="">Submit</button>
-        </div>
-        <input type="hidden" th:name="${_csrf.parameterName}"
-                                        th:value="${_csrf.token}">
-        <!--스프링 시큐리티를 사용할 경우 기본적으로 CSRF(cross Site Request Forgery)를 방어하기 위해 모든 Post
-        방식의 데이터 전송에는 CSRF 토큰 값이 있어야 한다. CSRF 토큰은 실제 서버에서 허용한 요청이 맞는지 확인하기 위한 토큰이다.
-        사용자의 세션에 임의의 값을 저장하여 요청마다 그 값을 포함하여 전송하면 서버에서 세션에 저장된 값과 요청이 온 값이 일치하는지
-        확인하여 CSRF를 방어-->
-    </form>
 
 </div>
 

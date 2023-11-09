@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout1}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+
+
+
+
+<style>
+    li{ list-style: none;}
+
+    /* Form input, button, and submit button styles */
+    .max-container select[name="searchOption"],
+    input[type="text"],
+    button,
+    submit {
+        padding: 0.3em;
+        font-size: 14px;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        cursor: pointer;
+
+    }
+
+    button:hover {
+        background-color: #2980b9;
+    }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<div layout:fragment="content">
+
+
+    <div class="py-5 text-center">
+        <h2>공지 사항 작성</h2>
+    </div>
+    <form th:action="@{/noticeWrite}" method="post">
+        <div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" th:name="nTitle" id="nTitle" th:placeholder="제목">
+                <label for="nTitle" class="form-label">제목</label>
+            </div>
+            <div class="form-floating">
+                <textarea class="form-control" style="height: 100px" th:name="content" id="content" th:placeholder="내용"></textarea>
+                <label for="content">내용</label>
+            </div>
+        </div>
+        <button type="submit">등록</button>
+    </form>
+    <hr>
+</div>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>

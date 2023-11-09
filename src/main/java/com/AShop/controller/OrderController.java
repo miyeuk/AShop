@@ -59,7 +59,7 @@ public class OrderController {
         //결과로 생성된 주문 번호와 요청이 성공했다는 HTTp응답 상태 코드를 반환.
 
             }
-    @GetMapping(value = {"/orders" , "/orders/{page}"})//주문 구매 이력
+    @GetMapping(value = {"/orders","/orders/{page}"})//주문 구매 이력
     public String orderHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
             Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 4);
             //한번에 가지고 올 주문의 갯수는 4개로 설정
@@ -73,7 +73,7 @@ public class OrderController {
     }
 
 
-    @PostMapping(" /order/{orderId}/cancel ")//주문 취소
+    @PostMapping("/order/{orderId}/cancel")//주문 취소
     public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){
 
         if(!orderService.validateOrder(orderId , principal.getName())){

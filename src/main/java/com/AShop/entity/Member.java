@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name ="member")
@@ -25,8 +26,9 @@ public class Member extends BaseEntity{
     /*회원은 이메일을 통해 유일하게 구분해야 하기 때문에 동일한 값이 데이터베이스에 들어올 수 없도록 UNIQUE 속성 지정*/
     private  String email;
     private String password;
+    private String zipcode;
     private String address;
-
+    private String detailAddr;
     @Enumerated(EnumType.STRING)
     private Role role;
     /*자바의 enum 타입을 엔티티 속성 지정 가능. Enum을 사용할 때 기본적으로 순서가 지정되는데
@@ -41,7 +43,9 @@ public class Member extends BaseEntity{
         Member member = new Member();
         member.setName(memberFormDto.getName());
         member.setEmail(memberFormDto.getEmail());
+        member.setZipcode(memberFormDto.getZipcode());
         member.setAddress(memberFormDto.getAddress());
+        member.setDetailAddr(memberFormDto.getDetailAddr());
         String password = passwordEncoder.encode(memberFormDto.getPassword());
         /*스프링 시큐리티 설정 클레스에 등록한 BCryptPasswordEncoder Bean을 파라미터로 넘겨서 비밀번호를 암호화 함*/
         member.setPassword(password);
@@ -50,5 +54,6 @@ public class Member extends BaseEntity{
         return member;
             }
 
-
+    @OneToMany(mappedBy = "member")
+    private List<Notice> notices;
 }

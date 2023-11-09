@@ -1,57 +1,135 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 
 <div th:fragment="header">
-    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="/">Shop</a>
+    <script src="/js/search.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item"
-                    sec:authorize="hasAnyAuthority('ROLE_ADMIN')" >
-                    <a class="nav-link" href="/admin/item/new">상품 등록</a>
+
+    <style>
+        .search {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 7px;
+            outline: none;
+            background-color: #fff;
+            color: #777;
+            font-size: 14px;
+
+        }
+        input[type="search"] {
+            border: none; /* 보더 제거 */
+
+            outline: none; /* 포커스 시 테두리 제거 */
+            background: transparent; /* 배경색 제거 */
+            box-shadow: none; /* 박스 그림자 제거 */
+        }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light py-1 shadow-sm sticky-top " style="width: 100%; border-bottom-left-radius:5px; border-bottom-right-radius:5px;">
+
+            <a class="navbar-brand " href="/"  >
+            <img src="/img/Logo/Logo3.png" width="300" alt="회사 로고 이미지" >
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--햄버거 메뉴를 만들게 해주는 코드 끝-->
+
+
+
+
+            <div class="collapse navbar-collapse text-center " id="navbarSupportedContent" style="margin-top: 1rem; font-weight: bold;" >
+            <!--id값을 햄버거 코드에 data-bs-target과 같게 해야 이 div안에 있는 메뉴를 인식하여 햄버거에 넣는다-->
+            <!--네비게이션 바 안에 들어가는 메뉴를 꾸며주는 코드-->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex bd-highlight" >
+
+
+                <li class="nav-item me-auto p-1 bd-highlight" sec:authorize="isAnonymous()">
+                    <a class="nav-link active" aria-current="page" href="/members/login">
+                         Log_in
+                    </a>
                 </li>
-                <li class="nav-item"
-                    sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                    <a class="nav-link" href="/admin/items">상품 관리</a>
+                <li class="nav-item  p-1 bd-highlight" sec:authorize="isAnonymous()">
+                    <a class="nav-link" href="/members/new">
+                        Sign
+                    </a>
                 </li>
-                <li class="nav-item"
-                    sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="/cart">장바구니</a>
+                <li class="nav-item dropdown p-1 bd-highlight" sec:authorize="isAuthenticated()" >
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMyPage" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        My</a>
+
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li class="nav-item me-auto p-1 bd-highlight" sec:authorize="isAuthenticated()">
+                        <a class="dropdown-item" href="/members/memberModify">
+                        My_Page
+                         </a>
+                        </li>
+                        <li class="nav-item p-1 bd-highlight" sec:authorize="isAuthenticated()">
+                        <a class="dropdown-item" href="/members/logout">
+                        Logout
+                        </a>
+
+                        <li class="nav-item p-1 bd-highlight" sec:authorize="isAuthenticated()">
+                        <a class="dropdown-item" href="/orders">
+                            구매 이력
+                        </a>
+                        </li>
+
+                    </ul>
                 </li>
-                <li class="nav-item"
-                    sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="/orders">구매이력</a>
+                <li class="nav-item dropdown p-1 bd-highlight" sec:authorize="hasAnyAuthority('ROLE_ADMIN')" >
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        관리자</a>
+
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')" >
+                        <a class="dropdown-item" href="/admin/item/new">상품 등록</a>
+                    </li>
+                    <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <a class="dropdown-item" href="/admin/items">상품 관리</a>
+                    </li>
+                    <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <a class="dropdown-item" href="#">회원 관리</a>
+                    </li>
+                    <li sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                        <a class="dropdown-item" href="#">회원 구매 관리</a>
+                    </li>
+                </ul>
                 </li>
-                <li class="nav-item"
-                    sec:authorize="isAnonymous()">
-                    <a class="nav-link" href="/members/login">로그인</a>
+
+                <li class="nav-item me-auto p-1 bd-highlight" >
+                    <a class="nav-link" href="/noticeList">공지사항</a>
                 </li>
-                <li class="nav-item"
-                    sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="/members/login">회원정보 수정</a>
-                </li>
-                <li class="nav-item"
-                    >
-                    <a class="nav-link" href="/members/login">게시판</a>
-                </li>
-                <li class="nav-item"
-                    sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="/members/logout">로그아웃</a>
+
+                <li class="nav-item p-1 bd-highlight" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/cart">
+                        <img src="/svg/handbag-fill.svg" width="30" alt="장바구니" >
+                    </a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg0" th:action="@{/}" method="get">
-                <input name="searchQuery" class="form-control mr-sm-2"
-                    type="search" placeholder="Search" aria-label="Search">
-                <button class=" btn btn-outline-success my-2 my-sm-0"
-                        type="submit">Search</button>
-            </form>
+
+
+
+
+            <form class="form-inline my-0 my-lg0 nav-item search input-group  bd-highlight" th:action="@{/}" method="get" style=" border: 2px solid lavender;   margin: auto; width: 20rem; height: 2.6rem; "  >
+                <input name="searchQuery" class="form-control mr-sm-0"
+                    type="search" placeholder="Search" aria-label="Search" >
+                <button class=" btn btn-outline-success my-0 my-sm-0 material-icons" type="submit" style="border: none">
+                    <img src ="/img/search.png" width="20" alt="검색" >
+                </button>
+
+                </form>
+
             </div>
         </nav>
     </div>
