@@ -1,44 +1,44 @@
 # AShop
 
-Three Null Shop을 위한 Spring Boot JPA 및 Spring Security 프로젝트입니다.
+A Spring Boot project with JPA and Spring Security for Three Null Shop.
 
-## 개요
+## Overview
 
-이 프로젝트는 Three Null Shop을 위해 Spring Data JPA 및 Spring Security를 통합한 Spring Boot 애플리케이션입니다. Spring Boot 스타터, Thymeleaf, QueryDSL, H2 데이터베이스 (테스트용), MySQL 커넥터, Lombok 등의 종속성이 포함되어 있습니다.
+This project is a Spring Boot application that incorporates Spring Data JPA and Spring Security, tailored for Three Null Shop. It includes dependencies for various Spring Boot starters, Thymeleaf, QueryDSL, H2 database (for testing), MySQL connector, Lombok, and more.
 
-## 전제 조건
+## Prerequisites
 
 - Java 11
-- MySQL 데이터베이스
+- MySQL database
 
-## 프로젝트 구조
+## Project Structure
 
 - **GroupId:** com.AShop
 - **ArtifactId:** Ashop
 - **Version:** 0.0.1-SNAPSHOT
-- **Description:** Three Null Shop을 위한 Spring Boot JPA 및 Spring Security
+- **Description:** Three Null Shop for Spring Boot JPA with Spring Security
 
-## 종속성
+## Dependencies
 
-- Spring Boot Data JPA, Thymeleaf, Web, Security 스타터
-- 런타임 개발 지원을 위한 DevTools
-- Spring Boot 및 Spring Security 테스트 종속성
-- 데이터 영속성을 위한 H2 데이터베이스 및 MySQL 커넥터
-- 간편한 Java 개발을 위한 Lombok
-- 타입 안전한 쿼리를 위한 QueryDSL
-- 향상된 Thymeleaf 템플릿을 위한 Thymeleaf 레이아웃 다이얼렉트
-- 데이터 유효성 검사 및 매핑을 위한 Validation 및 ModelMapper
+- Spring Boot starters for Data JPA, Thymeleaf, Web, and Security
+- DevTools for runtime development support
+- Testing dependencies for Spring Boot and Spring Security
+- H2 database and MySQL connector for data persistence
+- Lombok for simplified Java development
+- QueryDSL for type-safe querying
+- Thymeleaf layout dialect for enhanced Thymeleaf templating
+- Validation and ModelMapper for data validation and mapping
 
-## 빌드 설정
+## Build Configuration
 
-프로젝트는 빌드 도구로 Maven을 사용합니다. 주요 플러그인은 다음과 같습니다.
+The project uses Maven as the build tool. Notable plugins include:
 
-- `spring-boot-maven-plugin`: 애플리케이션을 패키징하기 위한 플러그인
-- `apt-maven-plugin`: QueryDSL 어노테이션 처리를 위한 플러그인
+- `spring-boot-maven-plugin` for packaging the application
+- `apt-maven-plugin` for QueryDSL annotation processing
 
-## 빌드 및 실행
+## Build and Run
 
-1. 저장소 복제:
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/your-username/Ashop.git
