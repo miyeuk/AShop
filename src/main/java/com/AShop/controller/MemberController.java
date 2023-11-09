@@ -4,11 +4,14 @@ import com.AShop.dto.MemberFormDto;
 import com.AShop.entity.Member;
 import com.AShop.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -60,5 +63,36 @@ public class MemberController {
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해 주세요");
         return "member/memberLoginForm";
+    }
+
+    @GetMapping("/memberModify")
+    public String showMemberModifyForm(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName(); // 현재 로그인한 사용자의 이메일을 가져옵니다.
+        Member member = memberService.getMemberByEamil(email);
+
+        // 회원 정보를 모델에 추가
+        model.addAttribute("member", member);
+
+        return "member/memberModify"; // 사용자에게 보여줄 뷰 페이지의 이름을 리턴합니다.
+    }
+
+    @PostMapping("/memberModify")
+    public String processMemberModify(@ModelAttribute("member") MemberFormDto memberFormDto, Model model) {
+        // 유효성 검사를 생략하고 진행합니다.
+
+        try {
+            // 현재 로그인한 사용자의 이메일을 가져옵니다.
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String email = auth.getName();
+
+            // MemberService를 활용하여 회원 정보를 수정합니다.
+            memberService.modifyMemberByEmail(email, memberFormDto);
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "member/memberModify";
+        }
+
+        return "redirect:/"; // 수정 완료 후 리다이렉트할 URL을 지정합니다.
     }
 }

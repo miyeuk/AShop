@@ -1,6 +1,7 @@
 package com.AShop.dto;
 
 
+import com.AShop.constant.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!--<head>-->
+<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
+<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+<!--</head>-->
+
+<!-- 사용자 스크립트 추가 -->
+<!--<th:block layout:fragment="script">-->
+<!--    <script th:inline="javascript">-->
+<!--        function memberModify() {-->
+<!--            var token = $("meta[name='_csrf']").attr("content");-->
+<!--            var header = $("meta[name='_csrf_header']").attr("content");-->
+
+<!--            var url = "/members/memberModify";-->
+<!--            var paramData = {-->
+<!--                name: $("#name").val(),-->
+<!--                phone: $("#phone").val(),-->
+<!--                addr: $("#addr").val(),-->
+<!--                detail_addr: $("#detail_addr").val(),-->
+<!--                zipcode: $("#zipcode").val()-->
+<!--            };-->
+
+<!--            var param = JSON.stringify(paramData);-->
+
+<!--            $.ajax({-->
+<!--                url: url,-->
+<!--                type: "POST",-->
+<!--                contentType: "application/json",-->
+<!--                data: param,-->
+<!--                beforeSend: function (xhr) {-->
+<!--                    xhr.setRequestHeader(header, token);-->
+<!--                },-->
+<!--                dataType: "json",-->
+<!--                cache: false,-->
+<!--                success: function (result, status) {-->
+<!--                    alert("회원 정보가 수정되었습니다.");-->
+<!--                },-->
+<!--                error: function (jqXHR, status, error) {-->
+<!--                    if (jqXHR.status == '401') {-->
+<!--                        alert('로그인 후 이용해주세요');-->
+<!--                        location.href = '/members/login';-->
+<!--                    } else {-->
+<!--                        alert(jqXHR.responseText);-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
+<!--    </script>-->
+<!--</th:block>-->
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!-- 사용자 정의 CSS 스타일을 여기에 추가 -->
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+
+        .background{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .outer__box{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 670px;
+            height: 800px;
+            border: 1px solid #AACDFF;
+            box-shadow: 7px 7px 39px 0px #0068FF40;
+            border-radius: 20px;
+            border: 1px;
+            margin-bottom: 120px;
+        }
+
+        .wrapper{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 470px;
+            height: 650px;
+            margin-bottom: 50px;
+        }
+
+        .wrapper__head{
+            width: 466px;
+            height: 94px;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 47.36px;
+            color: #0068ff;
+            text-align: center;
+        }
+        .__input{
+            width: 466px;
+            height: 56px;
+            border-width: 0px;
+            border-bottom: 1px solid gray;
+        }
+
+        .__input:focus{
+            outline: none;
+            border-bottom: 1px solid #0068FF;
+        }
+        label{
+            font-weight: bold;
+        }
+        p{
+            font-weight: bold;
+        }
+
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="background container">
+        <div class="outer__box">
+            <div class="wrapper">
+                <div class="wrapper__head">마이페이지</div><br>
+                <form id="memberModifyForm" method="post" role="form" th:action="@{/members/memberModify}" th:object="${member}" onsubmit="memberModify(); return false;">
+                    <!-- Add CSRF token input fields -->
+                    <!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+
+
+
+                    <div th:if="${member}">
+                        <p>안녕하세요, <span th:text="${member.name}"></span>님</p>
+                        <p>이메일: <span th:text="${member.email}"></span></p>
+
+                        <div class="form-group wrapper__name">
+                            <label for="name">이름:</label>
+                            <input type="text" id="name" name="name" class="form-control __input" th:value="${member.name}" required>
+                        </div><br>
+                        <input class="postBut" type="button" value="우편번호찾기" onclick="kakaopost()"
+                               style="float:right; border: none; border-radius: 5px; background-color: #cccccc;" >
+
+                        <div class="form-group wrapper__detailAddr">
+                            <label for="LOGIN_POST">우편번호:</label>
+                            <input type="text" id="LOGIN_POST" name="zipcode" class="form-control __input" th:value="${member.zipcode}" required><br>
+                        </div>
+
+                        <div class="form-group wrapper__address">
+                            <label for="LOGIN_ADDR">주소:</label>
+                            <input type="text" id="LOGIN_ADDR" name="address" class="form-control __input" th:value="${member.address}" required><br>
+                        </div>
+
+                        <div class="form-group wrapper__detailAddr">
+                            <label for="ADDR_DETAIL">상세 주소:</label>
+                            <input type="text" id="ADDR_DETAIL" name="detailAddr" class="form-control __input" th:value="${member.detailAddr}"><br>
+                        </div>
+
+                        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                            <label for="role">Role:</label>
+                            <select id="role" name="role">
+                                <option value="ADMIN">ADMIN</option>
+                                <option value="USER">USER</option>
+                            </select>
+                        </div>
+
+                        <input type="submit" class="btn btn-success" value="저장">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--    <section class="contents">-->
+<!--        <div class="container">-->
+<!--            <div class="mypage_big_box mx-auto">-->
+<!--                <div class="mypage">-->
+<!--                    <div class="board-container">-->
+<!--                        <form id="memberModifyForm" method="post" role="form" th:action="@{/members/memberModify}" th:object="${member}" onsubmit="memberModify(); return false;">-->
+<!--                            &lt;!&ndash; Add CSRF token input fields &ndash;&gt;-->
+<!--                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+<!--                            <h1>마이 페이지</h1>-->
+
+<!--                            <div th:if="${member}">-->
+<!--                                <p>안녕하세요, <span th:text="${member.name}"></span>님</p>-->
+<!--                                <p>이메일: <span th:text="${member.email}"></span></p>-->
+
+<!--                                <label for="name">이름:</label>-->
+<!--                                <input type="text" id="name" name="name" th:value="${member.name}" required><br>-->
+
+<!--                                <label for="phone">전화번호:</label>-->
+<!--                                <input type="text" id="phone" name="phone" th:value="${member.phone}"><br>-->
+
+<!--                                <label for="addr">주소:</label>-->
+<!--                                <input type="text" id="addr" name="addr" th:value="${member.address}" required><br>-->
+
+<!--                                <label for="detail_addr">상세 주소:</label>-->
+<!--                                <input type="text" id="detail_addr" name="detail_addr" th:value="${member.detailAddr}"><br>-->
+
+<!--                                <label for="zipcode">우편번호:</label>-->
+<!--                                <input type="text" id="zipcode" name="zipcode" th:value="${member.zipcode}" required><br>-->
+
+<!--                                <input type="submit" value="저장">-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+<!--</div>-->
+<th:block layout:fragment="script">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:inline="javascript">
+        function kakaopost() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    document.querySelector("#LOGIN_POST").value = data.zonecode;
+                    document.querySelector("#LOGIN_ADDR").value =  data.address
+                    document.querySelector("input[name=detailAddr]").focus(); //상세입력 포커싱
+                }
+            }).open();
+        }
+    </script>
+</th:block>
+</html>

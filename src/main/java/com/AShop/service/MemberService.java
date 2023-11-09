@@ -1,5 +1,6 @@
 package com.AShop.service;
 
+import com.AShop.dto.MemberFormDto;
 import com.AShop.entity.Member;
 import com.AShop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,31 @@ public class MemberService implements UserDetailsService {
         }
     }
 
+    public Member getMemberByEamil(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public Member modifyMemberByEmail(String email, MemberFormDto memberFormDto) {
+        Member member = memberRepository.findByEmail(email);
+        if (member == null) {
+            throw new RuntimeException("Member not found");
+        }
+
+        // 회원 정보를 업데이트합니다.
+        member.setName(memberFormDto.getName());
+        member.setZipcode(memberFormDto.getZipcode());
+        member.setAddress(memberFormDto.getAddress());
+        member.setDetailAddr(memberFormDto.getDetailAddr());
+        member.setRole(memberFormDto.getRole());
+        if (memberFormDto.getPassword() != null) {
+            // 비밀번호가 변경되었을 경우, 새로운 비밀번호로 업데이트합니다.
+            String newPassword = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(memberFormDto.getPassword());
+            member.setPassword(newPassword);
+        }
+
+        return memberRepository.save(member);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws
